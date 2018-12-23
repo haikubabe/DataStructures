@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#define MAXSIZE 999
 
 struct Node {
   int data;
@@ -14,6 +15,29 @@ int length(struct Node *head) {
    temp = temp->next;
   }
   return len;
+}
+
+int detectLoop(struct Node *head) {
+
+   if (head == NULL) {
+    printf("linked list is empty\n");
+    return -1;
+   }
+   struct Node *visit[MAXSIZE];
+   struct Node *temp = head;
+   visit[0] = temp;
+   int size = 0;
+   while (temp->next != NULL) {
+    temp = temp->next;
+    for (int i=0;i<=size;i++) {
+      if (visit[i] == temp) {
+        return 1;
+      }
+    }
+    size++;
+    visit[size] = temp;
+   }
+   return 0; 
 }
 
 void printList(struct Node *head) {
@@ -56,6 +80,8 @@ int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
   struct Node *third = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *fourth = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *fifth = (struct Node*)malloc(sizeof(struct Node));
 
   head->data = 1;
   head->next = second;
@@ -64,7 +90,13 @@ int main() {
   second->next = third;
 
   third->data = 3;
-  third->next = NULL;
+  third->next = fourth;
+
+  fourth->data = 4;
+  fourth->next = fifth;
+ 
+  fifth->data = 5;
+  fifth->next = NULL;
 
   printf("Length is : %d\n", length(head));
 
@@ -80,4 +112,5 @@ int main() {
   
   printNthFromLast(head,-2);
 
+  printf(detectLoop(head) == 1 ? "Loop is there\n" : "Loop is not there\n");
 }
