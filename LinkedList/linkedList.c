@@ -35,6 +35,10 @@ int printNthFromLast(struct Node *head, int pos) {
     printf("linked list is empty\n");
     return -1;
    }
+   if (pos<=0) {
+    printf("not a valid position\n");
+    return -1;
+   }
    int len = length(head);
    if (len<pos) {
     printf("position cannot be greater than the length of the linked list\n");
@@ -75,5 +79,7 @@ int main() {
   printf("%d\n", printNthFromLast(head,3));
 
   printf("%d\n", printNthFromLast(head,4));
+  
+  printf("%d\n", printNthFromLast(head,-2));
 
 }
