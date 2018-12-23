@@ -30,19 +30,19 @@ void printList(struct Node *head) {
   printf("\n");
 }
 
-int printNthFromLast(struct Node *head, int pos) {
+void printNthFromLast(struct Node *head, int pos) {
    if (head == NULL) {
     printf("linked list is empty\n");
-    return -1;
+    return;   
    }
    if (pos<=0) {
     printf("not a valid position\n");
-    return -1;
+    return;
    }
    int len = length(head);
    if (len<pos) {
     printf("position cannot be greater than the length of the linked list\n");
-    return -1;
+    return;
    }
    struct Node *last = head;
    int i = len-pos;
@@ -50,7 +50,7 @@ int printNthFromLast(struct Node *head, int pos) {
      last = last->next;
      i--;
    }
-   return last->data;
+   printf("%d\n", last->data);
 }
  
   
@@ -72,14 +72,14 @@ int main() {
 
   printList(head);
 
-  printf("%d\n", printNthFromLast(head,1));
+  printNthFromLast(head,1);
   
-  printf("%d\n", printNthFromLast(head,2));
+  printNthFromLast(head,2);
 
-  printf("%d\n", printNthFromLast(head,3));
+  printNthFromLast(head,3);
 
-  printf("%d\n", printNthFromLast(head,4));
+  printNthFromLast(head,4);
   
-  printf("%d\n", printNthFromLast(head,-2));
+  printNthFromLast(head,-2);
 
 }
