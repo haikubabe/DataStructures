@@ -44,13 +44,11 @@ void printNthFromLast(struct Node *head, int pos) {
     printf("position cannot be greater than the length of the linked list\n");
     return;
    }
-   struct Node *last = head;
-   int i = len-pos;
-   while (last->next != NULL && i>0) {
-     last = last->next;
-     i--;
+   struct Node *temp = head;
+   for (int i=1;i<len-pos+1;i++) {
+     temp = temp->next;
    }
-   printf("%d\n", last->data);
+   printf("%d\n", temp->data);
 }
  
   
