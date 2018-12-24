@@ -39,6 +39,20 @@ int detectLoop(struct Node *head) {
    return 0; 
 }
 
+//find loop in a linked list if it exists, using Floyd's Cycle Finding Algorithm
+int findLoop(struct Node *head) {
+   struct Node *slow = head;
+   struct Node *fast = head;
+   
+   while (slow != NULL && fast != NULL && fast->next != NULL) {
+     slow = slow->next;
+     fast = fast->next->next;
+     if (slow == fast)
+       return 1;
+   }
+   return 0;
+}
+
 //find the starting node of a linked list in a loop
 int findStartNode(struct Node *head) {
   if (head == NULL) {
@@ -135,6 +149,8 @@ int main() {
   printNthFromLast(head,-2);
 
   printf(detectLoop(head) == 1 ? "Loop is there\n" : "Loop is not there\n");
+  
+  printf(findLoop(head) == 1 ? "Loop is there\n" : "Loop is not there\n");
 
   printf("%d\n", findStartNode(head));
 
