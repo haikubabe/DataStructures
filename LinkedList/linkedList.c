@@ -145,6 +145,18 @@ void insertInSortedList(struct Node **head, int data) {
    newNode->next = current;
 }
 
+void reverseList(struct Node **head) {
+   struct Node *current = *head;
+   struct Node *prev = NULL, *next = NULL;
+   while (current != NULL) {
+     next = current->next;
+     current->next = prev;
+     prev = current;
+     current = next;
+   }
+   *head = prev;
+}
+
 void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
@@ -227,6 +239,10 @@ int main() {
   printf("%d\n", findLoopLength(head));
 
   insertInSortedList(&head, 5);
+
+  printList(head);
+
+  reverseList(&head);
 
   printList(head);
 
