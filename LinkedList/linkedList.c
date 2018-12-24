@@ -131,6 +131,11 @@ void insertInSortedList(struct Node **head, int data) {
    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
    newNode->data = data;
    newNode->next = NULL;
+   if (*head == NULL || (*head)->data >= newNode->data) {
+      newNode->next = *head;
+      *head = newNode;
+      return;
+   }
    struct Node *prev = NULL, *current = *head;
    while (current != NULL && current->data < newNode->data) {
       prev = current;
@@ -140,8 +145,7 @@ void insertInSortedList(struct Node **head, int data) {
    newNode->next = current;
 }
 
-void printList(struct Node *head) {
- 
+void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
     return;
