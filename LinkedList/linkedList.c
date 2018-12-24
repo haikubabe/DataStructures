@@ -157,6 +157,21 @@ void reverseList(struct Node **head) {
    *head = prev;
 }
 
+void reverseListRecursive(struct Node **head) {
+   if (*head == NULL) {
+      return;
+   }
+   struct Node *first = *head;
+   struct Node *rest = (*head)->next;
+   if (rest == NULL) {
+     return;
+   }
+   reverseListRecursive(&rest);
+   first->next->next = first;
+   first->next = NULL;	//to avoid loop
+   *head = rest; 
+}
+
 void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
@@ -243,6 +258,10 @@ int main() {
   printList(head);
 
   reverseList(&head);
+
+  printList(head);
+
+  reverseListRecursive(&head);
 
   printList(head);
 
