@@ -126,6 +126,20 @@ int findLoopLength(struct Node *head) {
    return count;
 }
 
+//insert a node in a sorted linked list
+void insertInSortedList(struct Node **head, int data) {
+   struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+   newNode->data = data;
+   newNode->next = NULL;
+   struct Node *prev = NULL, *current = *head;
+   while (current != NULL && current->data < newNode->data) {
+      prev = current;
+      current = current->next;
+   }
+   prev->next = newNode;
+   newNode->next = current;
+}
+
 void printList(struct Node *head) {
  
   if (head == NULL) {
@@ -181,7 +195,7 @@ int main() {
   fourth->data = 4;
   fourth->next = fifth;
  
-  fifth->data = 5;
+  fifth->data = 6;
   fifth->next = NULL;
 
   printf("Length is : %d\n", length(head));
@@ -207,5 +221,9 @@ int main() {
   printf("%d\n", findStartNodeInCycle(head));
   
   printf("%d\n", findLoopLength(head));
+
+  insertInSortedList(&head, 5);
+
+  printList(head);
 
 }
