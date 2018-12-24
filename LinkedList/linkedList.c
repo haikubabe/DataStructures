@@ -47,8 +47,9 @@ int findLoop(struct Node *head) {
    while (slow != NULL && fast != NULL && fast->next != NULL) {
      slow = slow->next;
      fast = fast->next->next;
-     if (slow == fast)
+     if (slow == fast) {
        return 1;
+     }
    }
    return 0;
 }
@@ -74,6 +75,30 @@ int findStartNode(struct Node *head) {
     visit[size] = temp;
    }
    return -1; 
+}
+
+int findStartNodeInCycle(struct Node *head) {
+   struct Node *slow = head;
+   struct Node *fast = head;
+   int loopExists = 0;
+
+   while (slow != NULL && fast != NULL && fast->next != NULL) {
+     slow = slow->next;
+     fast = fast->next->next;
+     if (slow == fast) {
+        loopExists = 1;
+        break; 
+     }      
+   }
+   if (loopExists == 1) {
+     slow = head;
+     while (slow != fast) {
+       slow = slow->next;
+       fast = fast->next;
+     }
+     return slow->data;
+   }
+   return -1;
 }
 
 void printList(struct Node *head) {
@@ -153,5 +178,7 @@ int main() {
   printf(findLoop(head) == 1 ? "Loop is there\n" : "Loop is not there\n");
 
   printf("%d\n", findStartNode(head));
+
+  printf("%d\n", findStartNodeInCycle(head));
 
 }
