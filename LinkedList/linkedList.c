@@ -80,25 +80,50 @@ int findStartNode(struct Node *head) {
 int findStartNodeInCycle(struct Node *head) {
    struct Node *slow = head;
    struct Node *fast = head;
-   int loopExists = 0;
 
    while (slow != NULL && fast != NULL && fast->next != NULL) {
      slow = slow->next;
      fast = fast->next->next;
      if (slow == fast) {
-        loopExists = 1;
         break; 
      }      
    }
-   if (loopExists == 1) {
-     slow = head;
-     while (slow != fast) {
-       slow = slow->next;
-       fast = fast->next;
-     }
-     return slow->data;
+   if (slow != fast) {
+     return -1;
    }
-   return -1;
+   
+   slow = head;
+   while (slow != fast) {
+     slow = slow->next;
+     fast = fast->next;
+   }
+   return slow->data;
+}
+
+//find the length of a loop in the linked list, return 0 if no loop is there
+int findLoopLength(struct Node *head) {
+   struct Node *slow = head;
+   struct Node *fast = head;
+
+   while (slow != NULL && fast != NULL && fast->next != NULL) {
+     slow = slow->next;
+     fast = fast->next->next;
+     if (slow == fast) {
+        break; 
+     }      
+   }
+   //loop is not present
+   if (slow != fast) {
+      return 0;
+   }
+     
+   int count = 1;
+   fast = fast->next;
+   while (slow != fast) {
+     count++;
+     fast = fast->next;
+   }
+   return count;
 }
 
 void printList(struct Node *head) {
@@ -180,5 +205,7 @@ int main() {
   printf("%d\n", findStartNode(head));
 
   printf("%d\n", findStartNodeInCycle(head));
+  
+  printf("%d\n", findLoopLength(head));
 
 }
