@@ -172,6 +172,76 @@ void reverseListRecursive(struct Node **head) {
    *head = rest; 
 }
 
+//brute force approach
+int findIntersection(struct Node *head1, struct Node *head2) {
+   struct Node *temp1 = head1;
+   struct Node *temp2 = head2;
+   while (temp1 != NULL) {
+     temp2 = head2;
+     while (temp2 != NULL) {
+       if (temp1 == temp2) {
+          return temp1->data;
+       }
+       temp2 = temp2->next;
+     }
+     temp1 = temp1->next;
+   }
+   return -1;   // if there is no merge point
+}
+
+//using hashing
+int findMergePoint(struct Node *head1, struct Node *head2) {
+   if (head1 == NULL || head2 == NULL) {
+     return -1;
+   }
+   struct Node *address[MAXSIZE];
+   struct Node *temp1 = head1;
+   struct Node *temp2 = head2;
+   int i=0;
+   while (temp1!=NULL) {
+      address[i] = temp1;
+      temp1 = temp1->next;
+      i++;
+   }
+   while (temp2!=NULL) {
+      for (int j=0;j<i;j++) {
+        if (address[j] == temp2) {
+           return temp2->data;
+        }    
+      }
+      temp2 = temp2->next;
+   }
+   return -1;
+}
+
+//using node difference
+int getMergePoint(struct Node *head1, struct Node *head2) {
+   int m = length(head1);
+   int n = length(head2);
+   struct Node *temp1 = head1, *temp2 = head2;
+   int d=0;
+   if (m<n) {
+     d = n-m;
+     temp1 = head2;
+     temp2 = head1;
+   } else {
+     d = m-n;
+     temp1 = head1;
+     temp2 = head2;
+   }
+   for (int i=0;i<d && temp1!=NULL;i++) {
+     temp1 = temp1->next;
+   }
+   while (temp1 != NULL && temp2 != NULL) {
+     if (temp1 == temp2) {
+       return temp1->data;
+     }
+     temp1 = temp1->next;
+     temp2 = temp2->next;
+   }
+   return -1;
+}
+
 void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
@@ -229,6 +299,15 @@ int main() {
   fifth->data = 6;
   fifth->next = NULL;
 
+  struct Node *head1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *second1 = (struct Node*)malloc(sizeof(struct Node));
+
+  head1->data = 5;
+  head1->next = second1;
+ 
+  second1->data = 7;
+  second1->next = fourth;
+
   printf("Length is : %d\n", length(head));
 
   printList(head);
@@ -264,5 +343,15 @@ int main() {
   reverseListRecursive(&head);
 
   printList(head);
+
+  printf("%d\n", findIntersection(head,head1));
+
+  printList(head);
+
+  printList(head1);
+
+  printf("%d\n", findMergePoint(head,head1));
+
+  printf("%d\n", getMergePoint(head,head1));
 
 }
