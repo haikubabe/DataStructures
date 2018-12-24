@@ -242,6 +242,19 @@ int getMergePoint(struct Node *head1, struct Node *head2) {
    return -1;
 }
 
+int findMiddle(struct Node *head) {
+   struct Node *slow = head;
+   struct Node *fast = head;
+   if (head == NULL) {
+     return -1;
+   }
+   while (fast != NULL && fast->next != NULL) {
+      slow = slow->next;
+      fast = fast->next->next;
+   }
+   return slow->data;
+}
+
 void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
@@ -353,5 +366,7 @@ int main() {
   printf("%d\n", findMergePoint(head,head1));
 
   printf("%d\n", getMergePoint(head,head1));
+
+  printf("%d\n", findMiddle(head));
 
 }
