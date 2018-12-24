@@ -18,7 +18,6 @@ int length(struct Node *head) {
 }
 
 int detectLoop(struct Node *head) {
-
    if (head == NULL) {
     printf("linked list is empty\n");
     return -1;
@@ -38,6 +37,29 @@ int detectLoop(struct Node *head) {
     visit[size] = temp;
    }
    return 0; 
+}
+
+//find the starting node of a linked list in a loop
+int findStartNode(struct Node *head) {
+  if (head == NULL) {
+    printf("linked list is empty\n");
+    return -1;
+   }
+   struct Node *visit[MAXSIZE];
+   struct Node *temp = head;
+   visit[0] = temp;
+   int size = 0;
+   while (temp->next != NULL) {
+    temp = temp->next;
+    for (int i=0;i<=size;i++) {
+      if (visit[i] == temp) {
+        return temp->data;
+      }
+    }
+    size++;
+    visit[size] = temp;
+   }
+   return -1; 
 }
 
 void printList(struct Node *head) {
@@ -113,4 +135,7 @@ int main() {
   printNthFromLast(head,-2);
 
   printf(detectLoop(head) == 1 ? "Loop is there\n" : "Loop is not there\n");
+
+  printf("%d\n", findStartNode(head));
+
 }
