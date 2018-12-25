@@ -309,37 +309,79 @@ void printNthFromLast(struct Node *head, int pos) {
    printf("%d\n", temp->data);
 }
  
-  
+//merge two sorted linked list in iterative way
+struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
+   if (head1 == NULL) {
+      return head2;
+   }
+   if (head2 == NULL) {
+      return head1;
+   }
+   struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+   struct Node *temp1 = head1, *temp2 = head2;
+   if (head1->data <= head2->data) {
+     newNode = head1;
+     temp1 = temp1->next;
+   } else {
+      newNode = head2;
+      temp2 = temp2->next;
+   }
+   struct Node *temp3 = newNode;
+   while (temp1 != NULL && temp2 != NULL) {
+     if (temp1->data <= temp2->data) {
+       temp3->next = temp1;
+       temp3 = temp1;
+       temp1 = temp1->next;
+     } else {
+       temp3->next = temp2;
+       temp3 = temp2;
+       temp2 = temp2->next;
+     }
+   }
+   while (temp1 != NULL) {
+     temp3->next = temp1;
+     temp3 = temp1;
+     temp1 = temp1->next;
+   }
+   while (temp2 != NULL) {
+     temp3->next = temp2;
+     temp3 = temp2;
+     temp2 = temp2->next;
+   }
+   temp3->next = NULL;
+   return newNode;
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
   struct Node *third = (struct Node*)malloc(sizeof(struct Node));
-  struct Node *fourth = (struct Node*)malloc(sizeof(struct Node));
-  struct Node *fifth = (struct Node*)malloc(sizeof(struct Node));
 
-  head->data = 1;
+  head->data = 10;
   head->next = second;
 
-  second->data = 2;
+  second->data = 40;
   second->next = third;
 
-  third->data = 3;
-  third->next = fourth;
-
-  fourth->data = 4;
-  fourth->next = fifth;
- 
-  fifth->data = 6;
-  fifth->next = NULL;
+  third->data = 70;
+  third->next = NULL;
 
   struct Node *head1 = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *third1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *fourth1 = (struct Node*)malloc(sizeof(struct Node));
 
-  head1->data = 5;
+  head1->data = 20;
   head1->next = second1;
  
-  second1->data = 7;
-  second1->next = fourth;
+  second1->data = 50;
+  second1->next = third1;
+
+  third1->data = 80;
+  third1->next = fourth1;
+
+  fourth1->data = 100;
+  fourth1->next = NULL;
 
   printf("Length is : %d\n", length(head));
 
@@ -391,4 +433,8 @@ int main() {
 
   printf(findEvenOrOdd(head) == 1 ? "Even\n" : "Odd\n");
 
+  printList(mergeSortedList(head, head1));
+
 }
+
+
