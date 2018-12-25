@@ -7,6 +7,7 @@ struct Node {
   struct Node *next;
 };
 
+//find the length of a linked list
 int length(struct Node *head) {
   int len = 0;
   struct Node *temp = head;
@@ -17,6 +18,7 @@ int length(struct Node *head) {
   return len;
 }
 
+//find loop in a linked list using Hashing
 int detectLoop(struct Node *head) {
    if (head == NULL) {
     printf("linked list is empty\n");
@@ -54,7 +56,7 @@ int findLoop(struct Node *head) {
    return 0;
 }
 
-//find the starting node of a linked list in a loop
+//find the starting node of a linked list in a loop using hashing technique
 int findStartNode(struct Node *head) {
   if (head == NULL) {
     printf("linked list is empty\n");
@@ -77,6 +79,7 @@ int findStartNode(struct Node *head) {
    return -1; 
 }
 
+//find the starting node of a cycle in a linked list using Floyd's Cycle Finding Algorithm
 int findStartNodeInCycle(struct Node *head) {
    struct Node *slow = head;
    struct Node *fast = head;
@@ -100,7 +103,7 @@ int findStartNodeInCycle(struct Node *head) {
    return slow->data;
 }
 
-//find the length of a loop in the linked list, return 0 if no loop is there
+//find the length of the loop in a linked list, return 0 if no loop is there
 int findLoopLength(struct Node *head) {
    struct Node *slow = head;
    struct Node *fast = head;
@@ -145,6 +148,7 @@ void insertInSortedList(struct Node **head, int data) {
    newNode->next = current;
 }
 
+//iterative way of reversing a linked list
 void reverseList(struct Node **head) {
    struct Node *current = *head;
    struct Node *prev = NULL, *next = NULL;
@@ -157,6 +161,7 @@ void reverseList(struct Node **head) {
    *head = prev;
 }
 
+//recursive way of reversing a linked list
 void reverseListRecursive(struct Node **head) {
    if (*head == NULL) {
       return;
@@ -172,7 +177,7 @@ void reverseListRecursive(struct Node **head) {
    *head = rest; 
 }
 
-//brute force approach
+//brute force approach to find the merge point of two singly linked list
 int findIntersection(struct Node *head1, struct Node *head2) {
    struct Node *temp1 = head1;
    struct Node *temp2 = head2;
@@ -189,7 +194,7 @@ int findIntersection(struct Node *head1, struct Node *head2) {
    return -1;   // if there is no merge point
 }
 
-//using hashing
+//using hashing technique to find the merge point of two singly linked list
 int findMergePoint(struct Node *head1, struct Node *head2) {
    if (head1 == NULL || head2 == NULL) {
      return -1;
@@ -214,7 +219,7 @@ int findMergePoint(struct Node *head1, struct Node *head2) {
    return -1;
 }
 
-//using node difference
+//using node difference approach to find the merge point of two singly linked list
 int getMergePoint(struct Node *head1, struct Node *head2) {
    int m = length(head1);
    int n = length(head2);
@@ -242,6 +247,7 @@ int getMergePoint(struct Node *head1, struct Node *head2) {
    return -1;
 }
 
+//find the middle of a linked list
 int findMiddle(struct Node *head) {
    struct Node *slow = head;
    struct Node *fast = head;
@@ -255,6 +261,19 @@ int findMiddle(struct Node *head) {
    return slow->data;
 }
 
+//find if a given linked list is even or odd
+int findEvenOrOdd(struct Node *head) {
+   struct Node *fast = head;
+   while (fast != NULL && fast->next != NULL) {
+      fast = fast->next->next;
+   }
+   if (fast != NULL) {
+     return 0;
+   }
+   return 1;
+}
+
+//print the elements of a linked list
 void printList(struct Node *head) { 
   if (head == NULL) {
     printf("linked list is empty, cannot print it\n");
@@ -268,6 +287,7 @@ void printList(struct Node *head) {
   printf("\n");
 }
 
+//print Nth Node from the end of a linked list
 void printNthFromLast(struct Node *head, int pos) {
    if (head == NULL) {
     printf("linked list is empty\n");
@@ -368,5 +388,7 @@ int main() {
   printf("%d\n", getMergePoint(head,head1));
 
   printf("%d\n", findMiddle(head));
+
+  printf(findEvenOrOdd(head) == 1 ? "Even\n" : "Odd\n");
 
 }
