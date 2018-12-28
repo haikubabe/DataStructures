@@ -409,6 +409,60 @@ void printCircularList(struct Node *head) {
   printf("\n");
 }
 
+//check if two lists are same or not
+int checkListSame(struct Node *head1, struct Node *head2) {
+   struct Node *temp1 = head1;
+   struct Node *temp2 = head2;
+   while (temp1 != NULL && temp2 != NULL) {
+      if (temp1->data == temp2->data) {
+	   temp1 = temp1->next;
+	   temp2 = temp2->next;
+      }
+      else {
+	   return 0;
+      }
+   }
+   if (temp1 == NULL && temp2 == NULL) {
+	return 1;
+   }
+   return 0;
+}
+
+//check if a list is palindrome or not
+int checkPalindrome(struct Node *head) {
+   struct Node *slow = head;
+   struct Node *fast = head;
+   struct Node *prev_slow = NULL, *secondHalf = NULL;
+   int res = 1;
+
+   if (head != NULL && head->next != NULL) {
+     while(fast != NULL && fast->next != NULL) {
+      	prev_slow = slow;
+      	slow = slow->next;
+      	fast = fast->next->next;
+     }  
+     struct Node *midNode = NULL;
+     //to handle the odd case, in case of odd the mid node will not be included in the second half
+     //in case of even there will be no mid node and the mid node i.e. slow will be included in the second half
+     if (fast != NULL) {
+      	midNode = slow;
+      	slow = slow->next;
+     }
+     secondHalf = slow;
+     prev_slow->next = NULL;
+     reverseList(&secondHalf);
+     res = checkListSame(head, secondHalf);
+     reverseList(&secondHalf);
+     if (midNode != NULL) {
+        prev_slow->next = midNode;
+        midNode->next = secondHalf;
+     } else {
+        prev_slow->next = secondHalf;
+     }
+  }
+  return res;
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -523,6 +577,29 @@ int main() {
   printCircularList(head2);
 
   printCircularList(head3);
+
+  struct Node *one1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *two1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *three1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *four1 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *five1 = (struct Node*)malloc(sizeof(struct Node));
+
+  one1->data = 10;
+  one1->next = two1;
+
+  two1->data = 20;
+  two1->next = three1;
+
+  three1->data = 30;
+  three1->next = four1;
+
+  four1->data = 20;
+  four1->next = five1;
+
+  five1->data = 50;
+  five1->next = NULL;
+
+  printf(checkPalindrome(one1) == 1 ? "Palindrome\n" : "Not Palindrome\n");
 
 }
 
