@@ -261,7 +261,7 @@ int findMiddle(struct Node *head) {
    return slow->data;
 }
 
-//find if a given linked list is even or odd
+//find if a given linked list is even or odd, return true(1) if even else return false(0)
 int findEvenOrOdd(struct Node *head) {
    struct Node *fast = head;
    while (fast != NULL && fast->next != NULL) {
@@ -352,6 +352,44 @@ struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
    return newNode;
 }
 
+//split a circular linked list into two halves, if the list is odd then make the first list one node more than the second list
+void splitList(struct Node *head, struct Node **head1, struct Node **head2) {
+  
+   struct Node *slow = head;
+   struct Node *fast = head;
+
+   //in case of odd fast->next becomes head and in case of even fast->next->next becomes head
+   while (fast->next != head && fast->next->next != head) {
+	slow = slow->next;	 // will give the mid node
+	fast = fast->next->next; //in case of odd elements fast is the last node and in case of even elements fast is the last node's previous  				node
+   }
+   //find the last node for even elements
+   if (fast->next->next == head) {
+       fast = fast->next;
+   }
+   *head1 = head;
+   //if there is only one node then there will be only one list
+   if (head->next != head) {
+     *head2 = slow->next;
+   }
+   fast->next = slow->next; //make the second list circular
+   slow->next = head;	    //make the first list circular
+}					
+
+//print the elements of a circular linked list
+void printCircularList(struct Node *head) {
+  if (head == NULL) {
+   printf("list is empty\n");
+   return;
+  }
+  struct Node *temp = head;
+  do {
+   printf("%d\t", temp->data);
+   temp = temp->next;
+  } while(temp!=head);
+  printf("\n");
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -434,6 +472,38 @@ int main() {
   printf(findEvenOrOdd(head) == 1 ? "Even\n" : "Odd\n");
 
   printList(mergeSortedList(head, head1));
+ 
+  struct Node *one = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *two = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *three = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *four = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *five = (struct Node*)malloc(sizeof(struct Node));
+
+  one->data = 10;
+  one->next = two;
+
+  two->data = 70;
+  two->next = three;
+
+  three->data = 40;
+  three->next = four;
+
+  four->data = 60;
+  four->next = five;
+
+  five->data = 80;
+  five->next = one;
+
+  struct Node *head2 = NULL;
+  struct Node *head3 = NULL;
+
+  printCircularList(one);
+  
+  splitList(one, &head2, &head3);
+
+  printCircularList(head2);
+
+  printCircularList(head3);
 
 }
 
