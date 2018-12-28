@@ -361,7 +361,7 @@ void splitList(struct Node *head, struct Node **head1, struct Node **head2) {
    //in case of odd fast->next becomes head and in case of even fast->next->next becomes head
    while (fast->next != head && fast->next->next != head) {
 	slow = slow->next;	 // will give the mid node
-	fast = fast->next->next; //in case of odd elements fast is the last node and in case of even elements fast is the last node's previous  				node
+	fast = fast->next->next; //in case of odd fast is the last node and in case of even fast is the last node's previous node
    }
    //find the last node for even elements
    if (fast->next->next == head) {
