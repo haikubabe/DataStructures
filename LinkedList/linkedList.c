@@ -353,7 +353,7 @@ struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
 }
 
 //split a circular linked list into two halves, if the list is odd then make the first list one node more than the second list
-void splitList(struct Node *head, struct Node **head1, struct Node **head2) {
+void splitCircularList(struct Node *head, struct Node **head1, struct Node **head2) {
   
    struct Node *slow = head;
    struct Node *fast = head;
@@ -375,6 +375,25 @@ void splitList(struct Node *head, struct Node **head1, struct Node **head2) {
    fast->next = slow->next; //make the second list circular
    slow->next = head;	    //make the first list circular
 }					
+
+//split a singly linked list into two halves, if the list is odd then make the first list one node more than the second list
+void splitList(struct Node *head, struct Node **head1, struct Node **head2) {
+  
+   struct Node *slow = head;
+   struct Node *fast = head;
+
+   //in case of odd fast->next becomes null and in case of even fast->next->next becomes null
+   while (fast->next != NULL && fast->next->next != NULL) {
+	slow = slow->next;	 // will give the mid node
+	fast = fast->next->next; //in case of odd fast is the last node and in case of even fast is the last node's previous node
+   }
+   *head1 = head;
+   //if there is only one node then there will be only one list
+   if (head->next != NULL) {
+     *head2 = slow->next;
+   }
+   slow->next = NULL;
+}	
 
 //print the elements of a circular linked list
 void printCircularList(struct Node *head) {
@@ -499,7 +518,7 @@ int main() {
 
   printCircularList(one);
   
-  splitList(one, &head2, &head3);
+  splitCircularList(one, &head2, &head3);
 
   printCircularList(head2);
 
