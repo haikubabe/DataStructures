@@ -533,6 +533,20 @@ void pairWiseSwap(struct Node **head) {
    }
 }
 
+//pair wise reverse the linked list recursively
+struct Node *pairWiseSwapRecursive(struct Node *head) {
+   if (head == NULL || head->next == NULL) {
+	return NULL;
+   }
+   //reverse the first pair
+   struct Node *current = head->next;
+   head->next = current->next;
+   current->next = head;
+   head = current;
+   head->next->next = pairWiseSwapRecursive(head->next->next);
+   return head;
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -627,8 +641,8 @@ int main() {
 
   printf("Pairwise reverse a linked list\n");
   printList(head);
-  pairWiseSwap(&head);
-  printList(head);
+//  pairWiseSwap(&head);
+  printList(pairWiseSwapRecursive(head));
 
   struct Node *one = (struct Node*)malloc(sizeof(struct Node));
   struct Node *two = (struct Node*)malloc(sizeof(struct Node));
