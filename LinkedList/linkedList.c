@@ -317,7 +317,7 @@ struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
    if (head2 == NULL) {
       return head1;
    }
-   struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+   struct Node *newNode = NULL;
    struct Node *temp1 = head1, *temp2 = head2;
    if (head1->data <= head2->data) {
      newNode = head1;
@@ -338,17 +338,12 @@ struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
        temp2 = temp2->next;
      }
    }
-   while (temp1 != NULL) {
-     temp3->next = temp1;
-     temp3 = temp1;
-     temp1 = temp1->next;
+   if (temp1 != NULL) {
+       temp3->next = temp1;
    }
-   while (temp2 != NULL) {
+   if (temp2 != NULL) {
      temp3->next = temp2;
-     temp3 = temp2;
-     temp2 = temp2->next;
    }
-   temp3->next = NULL;
    return newNode;
 }
 
@@ -463,6 +458,42 @@ int checkPalindrome(struct Node *head) {
   return res;
 }
 
+//reverse the two sorted merged linked list
+struct Node *reverseSortedMerge(struct Node *head1, struct Node *head2) {
+   struct Node *current1 = head1;
+   struct Node *current2 = head2;
+   struct Node *res = NULL, *next = NULL;
+   if (head1 == NULL && head2 == NULL) {
+	return NULL;
+   }
+   while (current1 != NULL && current2 != NULL) {
+      if (current1->data <= current2->data) {
+        next = current1->next;
+        current1->next = res;
+        res = current1;
+        current1 = next;
+      } else {
+        next = current2->next;
+        current2->next = res;
+	res = current2;
+	current2 = next;
+      }
+   }
+   while (current1 != NULL) {
+      next = current1->next;
+      current1->next = res;
+      res = current1;
+      current1 = next;
+   }
+   while (current2 != NULL) {
+     next = current2->next;
+     current2->next = res;
+     res = current2;
+     current2 = next;
+   }
+   return res;
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -544,8 +575,16 @@ int main() {
 
   printf(findEvenOrOdd(head) == 1 ? "Even\n" : "Odd\n");
 
+  printf("Merge two sorted linked lists\n");
+  printList(head);
+  printList(head1);
   printList(mergeSortedList(head, head1));
- 
+
+//  printf("Reverse Sorted Merge\n");
+//  printList(head);
+//  printList(head1);
+//  printList(reverseSortedMerge(head, head1));
+
   struct Node *one = (struct Node*)malloc(sizeof(struct Node));
   struct Node *two = (struct Node*)malloc(sizeof(struct Node));
   struct Node *three = (struct Node*)malloc(sizeof(struct Node));
