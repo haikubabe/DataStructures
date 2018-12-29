@@ -511,6 +511,28 @@ struct Node *reverseSortedMerge(struct Node *head1, struct Node *head2) {
    return res;
 }
 
+//pair wise reverse the linked list
+void pairWiseSwap(struct Node **head) {
+   if (*head == NULL || (*head)->next == NULL) {
+        return;
+   }
+   struct Node *prev = *head;
+   struct Node *current = (*head)->next;
+   *head = current;
+   struct Node *next = NULL;
+   while (current != NULL) {
+      next = current->next;
+      current->next = prev;
+      if (next == NULL || next->next == NULL) {
+  	   prev->next = next;
+	   break;
+      }
+      prev->next = next->next;
+      prev = next;
+      current = prev->next; 
+   }
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -595,13 +617,18 @@ int main() {
   printf("Merge two sorted linked lists\n");
   printList(head);
   printList(head1);
-//  printList(mergeSortedList(head, head1));
-  printList(mergeSortedListRecursive(head, head1));
+  printList(mergeSortedList(head, head1));
+  //printList(mergeSortedListRecursive(head, head1));
 
 //  printf("Reverse Sorted Merge\n");
 //  printList(head);
 //  printList(head1);
 //  printList(reverseSortedMerge(head, head1));
+
+  printf("Pairwise reverse a linked list\n");
+  printList(head);
+  pairWiseSwap(&head);
+  printList(head);
 
   struct Node *one = (struct Node*)malloc(sizeof(struct Node));
   struct Node *two = (struct Node*)malloc(sizeof(struct Node));
