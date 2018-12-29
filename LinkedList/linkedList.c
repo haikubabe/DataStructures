@@ -347,6 +347,23 @@ struct Node *mergeSortedList(struct Node *head1, struct Node *head2) {
    return newNode;
 }
 
+//merge two sorted linked list recursively
+struct Node *mergeSortedListRecursive(struct Node *head1, struct Node *head2) {
+     if (head1 == NULL) {
+	return head2;
+     }
+     if (head2 == NULL) {
+	return head1;
+     }
+     if (head1->data <= head2->data) {
+	head1->next = mergeSortedListRecursive(head1->next, head2);
+	return head1;
+     } else {
+        head2->next = mergeSortedListRecursive(head1, head2->next);
+	return head2;
+     }
+}
+
 //split a circular linked list into two halves, if the list is odd then make the first list one node more than the second list
 void splitCircularList(struct Node *head, struct Node **head1, struct Node **head2) {
   
@@ -578,7 +595,8 @@ int main() {
   printf("Merge two sorted linked lists\n");
   printList(head);
   printList(head1);
-  printList(mergeSortedList(head, head1));
+//  printList(mergeSortedList(head, head1));
+  printList(mergeSortedListRecursive(head, head1));
 
 //  printf("Reverse Sorted Merge\n");
 //  printList(head);
