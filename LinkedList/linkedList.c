@@ -547,6 +547,40 @@ struct Node *pairWiseSwapRecursive(struct Node *head) {
    return head;
 }
 
+//check if the no. of nodes in a linked list is equal to k or not
+int hasKNodes(struct Node *head, int k) {
+  struct Node *current = head;
+  int count = 0;
+  while(current != NULL && count < k) {
+    current = current->next;
+    count++;
+  }
+  if (count == k) return 1;
+  else return 0;
+}
+ 
+//reverse a linked list in groups of given size
+struct Node *groupWiseSwap(struct Node *head, int k) {
+   struct Node *current = head;
+   struct Node *prev = NULL, *next = NULL;
+   int count = 0;
+   if (hasKNodes(head, k)) {
+      while (current != NULL && count < k) {
+      	next = current->next;
+      	current->next = prev;
+      	prev = current;
+      	current = next;
+      	count++;
+      }
+      //if (k+1)th node is not null
+      if (next != NULL) {
+     	head->next = groupWiseSwap(next, k);
+      }
+      return prev;
+   }
+   return current;
+}
+
 int main() {
   struct Node *head = (struct Node*)malloc(sizeof(struct Node));
   struct Node *second = (struct Node*)malloc(sizeof(struct Node));
@@ -698,6 +732,33 @@ int main() {
   five1->next = NULL;
 
   printf(checkPalindrome(one1) == 1 ? "Palindrome\n" : "Not Palindrome\n");
+
+  struct Node *first2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *second2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *third2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *fourth2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *fifth2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *sixth2 = (struct Node*)malloc(sizeof(struct Node));
+
+  first2->data = 1;
+  first2->next = second2;
+  
+  second2->data = 2;
+  second2->next = third2;
+
+  third2->data = 3;
+  third2->next = fourth2;
+
+  fourth2->data = 4;
+  fourth2->next = fifth2;
+
+  fifth2->data = 5;
+  fifth2->next = sixth2;
+
+  sixth2->data = 6;
+  sixth2->next = NULL;
+
+  printList(groupWiseSwap(first2, 4));
 
 }
 
