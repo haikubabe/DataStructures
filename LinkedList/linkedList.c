@@ -177,6 +177,18 @@ void reverseListRecursive(struct Node **head) {
    *head = rest; 
 }
 
+void reverseList1(struct Node *head) {
+   struct Node *current = head;
+   struct Node *prev = NULL, *next = NULL;
+   while (current != NULL) {
+     next = current->next;
+     current->next = prev;
+     prev = current;
+     current = next;
+   }
+   head = prev;
+}
+
 //brute force approach to find the merge point of two singly linked list
 int findIntersection(struct Node *head1, struct Node *head2) {
    struct Node *temp1 = head1;
@@ -555,11 +567,13 @@ int hasKNodes(struct Node *head, int k) {
     current = current->next;
     count++;
   }
-  if (count == k) return 1;
-  else return 0;
-}
- 
-//reverse a linked list in groups of given size
+  if (count == k) {
+    return 1;
+  }
+  return 0;
+} 
+
+//reverse a linked list in groups of given size recursively
 struct Node *groupWiseSwap(struct Node *head, int k) {
    struct Node *current = head;
    struct Node *prev = NULL, *next = NULL;
@@ -579,6 +593,49 @@ struct Node *groupWiseSwap(struct Node *head, int k) {
       return prev;
    }
    return current;
+}
+
+//reverse a linked list in groups of given size iteratively
+struct Node *reverseBlock(struct Node *head, int k) {
+   struct Node *current = head, *newNode = NULL, *temp = NULL;
+   struct Node *prev = NULL, *next = NULL, *q = NULL;
+   int count = 0;
+   if (hasKNodes(current, k)) {
+     while (current != NULL && count < k-1) {
+         current = current->next;
+ 	 count++;
+     }
+     newNode = current;
+     q = newNode; //assign it to the last element of the group
+     while (1) {
+       current = head; //assign it to the first element of the group 
+       temp = q->next; //assign it to the first element of the next group
+       //if total number of nodes is divisible by k
+       if (temp == NULL) {
+     	   reverseList1(current);
+	   return newNode;     
+       }
+       q->next = NULL;
+       q = temp;    //assign it to the first element of the next group
+       head = temp; //assign it to the first element of the next group 
+       count = 0;
+       while (temp != NULL && count < k-1) {
+           if (temp->next == NULL) {
+	   	reverseList1(current);
+	        current->next = q;
+		return newNode;
+	   }
+	   temp = temp->next;
+	   count++;
+       }
+       reverseList1(current);
+       current->next = temp;
+       q = temp;   //assign it to the last element of the group
+     }
+   } else {
+     newNode = head;
+   }
+   return newNode;
 }
 
 int main() {
@@ -739,6 +796,8 @@ int main() {
   struct Node *fourth2 = (struct Node*)malloc(sizeof(struct Node));
   struct Node *fifth2 = (struct Node*)malloc(sizeof(struct Node));
   struct Node *sixth2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *seventh2 = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *eighth2 = (struct Node*)malloc(sizeof(struct Node));
 
   first2->data = 1;
   first2->next = second2;
@@ -756,9 +815,17 @@ int main() {
   fifth2->next = sixth2;
 
   sixth2->data = 6;
-  sixth2->next = NULL;
+  sixth2->next = seventh2;
+  
+  seventh2->data = 7;
+  seventh2->next = eighth2;
 
-  printList(groupWiseSwap(first2, 4));
+  eighth2->data = 8;
+  eighth2->next = NULL;
+
+//  printList(groupWiseSwap(first2, 4));
+
+  printList(reverseBlock(first2, 4));
 
 }
 
