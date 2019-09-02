@@ -177,18 +177,6 @@ void reverseListRecursive(struct Node **head) {
    *head = rest; 
 }
 
-void reverseList1(struct Node *head) {
-   struct Node *current = head;
-   struct Node *prev = NULL, *next = NULL;
-   while (current != NULL) {
-     next = current->next;
-     current->next = prev;
-     prev = current;
-     current = next;
-   }
-   head = prev;
-}
-
 //brute force approach to find the merge point of two singly linked list
 int findIntersection(struct Node *head1, struct Node *head2) {
    struct Node *temp1 = head1;
@@ -571,9 +559,26 @@ int hasKNodes(struct Node *head, int k) {
     return 1;
   }
   return 0;
-} 
+}
+ 
+//get (k+1)th node of a linked list
+struct Node *getKPlusOneThNode(struct Node *head, int k) {
+   struct Node *current = head;
+   int count = 0;
+   if (!head) {
+	return head;
+   }
+   while (current != NULL && count < k) {
+       current = current->next;
+       count++;
+   }
+   if (count == k && current != NULL) {
+	return current;
+   }
+   return head->next;
+}
 
-//reverse a linked list in groups of given size recursively
+//reverse a linked list in groups of given size
 struct Node *groupWiseSwap(struct Node *head, int k) {
    struct Node *current = head;
    struct Node *prev = NULL, *next = NULL;
@@ -595,13 +600,14 @@ struct Node *groupWiseSwap(struct Node *head, int k) {
    return current;
 }
 
-//reverse a linked list in groups of given size iteratively
-struct Node *reverseBlock(struct Node *head, int k) {
-   struct Node *current = head, *newNode = NULL, *temp = NULL;
-   struct Node *prev = NULL, *next = NULL, *q = NULL;
-   int count = 0;
-   if (hasKNodes(current, k)) {
+/*struct Node *reverseBlock(struct Node *head, int k) {
+     struct Node *current = head, *newNode = NULL, *temp = NULL;
+     struct Node *prev = NULL, *next = NULL, *q = NULL;
+     int count = 0;
      while (current != NULL && count < k-1) {
+         if (current->next == NULL) {
+           return head;
+	 }
          current = current->next;
  	 count++;
      }
@@ -612,7 +618,7 @@ struct Node *reverseBlock(struct Node *head, int k) {
        temp = q->next; //assign it to the first element of the next group
        //if total number of nodes is divisible by k
        if (temp == NULL) {
-     	   reverseList1(current);
+     	   reverseList(&current);
 	   return newNode;     
        }
        q->next = NULL;
@@ -621,21 +627,73 @@ struct Node *reverseBlock(struct Node *head, int k) {
        count = 0;
        while (temp != NULL && count < k-1) {
            if (temp->next == NULL) {
-	   	reverseList1(current);
+	   	reverseList(&current);
 	        current->next = q;
 		return newNode;
 	   }
 	   temp = temp->next;
 	   count++;
        }
-       reverseList1(current);
+       reverseList(&current);
        current->next = temp;
        q = temp;   //assign it to the last element of the group
      }
-   } else {
-     newNode = head;
-   }
-   return newNode;
+     return newNode;
+}*/
+
+struct Node *reverseBlock(struct Node *start , int k)
+{
+	//swap the linked list in group size = k
+	struct Node *p , *q ,*new_start , *temp;
+	int cnt;
+	p = start;
+	cnt = 0;
+	while(cnt != k-1)    // go to the 'K'th node
+	{
+		if(p->next == NULL)
+			{
+			return start;
+			}
+		p = p->next;
+		cnt++;
+	}
+	
+	new_start = p; //the new start		
+	q = new_start;	
+	while(1)
+	{
+		p = start;
+		temp = q->next;
+		if(temp == NULL)  // if total number of nodes is divisible by K (multiple of K)
+		{
+			reverseList(&p);
+			return new_start;
+		}
+		
+		q->next = NULL;
+		q = temp;
+		start = temp;
+		
+		cnt = 0;
+		//in the last outside while loop , if remainder is non-zero number of nodes
+		while(cnt != k-1) 
+		{
+			if(temp->next == NULL)
+				{
+					reverseList(&p);	
+					p->next = q;
+					return new_start;
+				}		
+			temp = temp->next;
+			cnt++;
+		}
+		
+		reverseList(&p);
+		p->next = temp;
+		q = temp;
+	}
+
+return new_start;
 }
 
 int main() {
@@ -823,9 +881,9 @@ int main() {
   eighth2->data = 8;
   eighth2->next = NULL;
 
-//  printList(groupWiseSwap(first2, 4));
+  //printList(groupWiseSwap(first2, 4));
 
-  printList(reverseBlock(first2, 4));
+  printList(reverseBlock(first2, 3));
 
 }
 
